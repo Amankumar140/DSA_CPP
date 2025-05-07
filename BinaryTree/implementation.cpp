@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <map>
 using namespace std;
 class Node
 {
@@ -119,7 +120,36 @@ int sum(Node *root)
     int leftSum = sum(root->left);
     int rightSum = sum(root->right);
     return leftSum + rightSum + root->data;
-} 
+}
+
+// TC O(nlogn)
+void topView(Node *root)
+{
+    queue<pair<Node *, int>> q;// {Node, horizontal distance}
+    map<int, int> m;            // {HD, val}
+    q.push({root, 0});
+    while (q.size() > 0)
+    {
+        Node *curr = q.front().first;
+        int currHD = q.front().second;
+        q.pop();
+
+        if (m.find(currHD) == m.end())
+        {
+            m[currHD] = curr->data;
+        }
+
+        if (curr->left != NULL)
+            q.push({curr->left, currHD - 1});
+        if (curr->right != NULL)
+            q.push({curr->right, currHD + 1});
+    }
+
+    for(auto it:m){
+        cout<<it.second<<" ";
+    }
+    cout<<endl;
+}
 
 int main()
 {
@@ -132,9 +162,11 @@ int main()
     //  postOrder(tree);
     //  cout<<endl;
     //  levelOrder(tree);
-    cout << height(tree) << endl;
-    cout << count(tree) << endl;
-    cout << sum(tree) << endl;
+    // cout << height(tree) << endl;
+    // cout << count(tree) << endl;
+    // cout << sum(tree) << endl;
+
+    topView(tree);
 
     return 0;
 }

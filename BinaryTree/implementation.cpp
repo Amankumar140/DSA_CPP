@@ -125,7 +125,7 @@ int sum(Node *root)
 // TC O(nlogn)
 void topView(Node *root)
 {
-    queue<pair<Node *, int>> q;// {Node, horizontal distance}
+    queue<pair<Node *, int>> q; // {Node, horizontal distance}
     map<int, int> m;            // {HD, val}
     q.push({root, 0});
     while (q.size() > 0)
@@ -145,17 +145,33 @@ void topView(Node *root)
             q.push({curr->right, currHD + 1});
     }
 
-    for(auto it:m){
-        cout<<it.second<<" ";
+    for (auto it : m)
+    {
+        cout << it.second << " ";
     }
-    cout<<endl;
+    cout << endl;
+}
+
+// kth level
+void kLevel(Node *root, int k)
+{
+    if (root == NULL)
+        return;
+    if (k == 1)
+    {
+        cout << root->data << " ";
+        return;
+    }
+    kLevel(root->left, k - 1);
+    kLevel(root->right, k - 1);
 }
 
 int main()
 {
-    vector<int> preorder = {1, 2, -1, -1, 3, 4, -1, -1, 5, -1, -1};
+    vector<int> preorder = {1, 2, 7, -1, -1, -1, 3, 4, -1, -1, 5, -1, -1};
+    idx = -1;
     Node *tree = buildTree(preorder);
-    //  preOrder(tree);
+    preOrder(tree);
     //  cout<<endl;
     //  inOrder(tree);
     //  cout<<endl;
@@ -166,7 +182,9 @@ int main()
     // cout << count(tree) << endl;
     // cout << sum(tree) << endl;
 
-    topView(tree);
+    // topView(tree);
+    kLevel(tree, 2);
+    cout << endl;
 
     return 0;
 }

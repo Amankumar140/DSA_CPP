@@ -166,11 +166,25 @@ void kLevel(Node *root, int k)
     kLevel(root->right, k - 1);
 }
 
+// transform to sum tree O(n)
+
+int TreeSum(Node* root){
+    if(root==NULL) return 0;
+
+    int leftSum=TreeSum(root->left);
+    int rightSum=TreeSum(root->right);
+    root->data+=leftSum+rightSum;
+    return root->data;
+}
+
 int main()
 {
     vector<int> preorder = {1, 2, 7, -1, -1, -1, 3, 4, -1, -1, 5, -1, -1};
     idx = -1;
     Node *tree = buildTree(preorder);
+    preOrder(tree);
+    TreeSum(tree);
+    cout<<endl;
     preOrder(tree);
     //  cout<<endl;
     //  inOrder(tree);
@@ -183,8 +197,8 @@ int main()
     // cout << sum(tree) << endl;
 
     // topView(tree);
-    kLevel(tree, 2);
-    cout << endl;
+    // kLevel(tree, 2);
+    // cout << endl;
 
     return 0;
 }

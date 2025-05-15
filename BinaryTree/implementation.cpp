@@ -152,6 +152,38 @@ void topView(Node *root)
     cout << endl;
 }
 
+// vertical level
+void verticallevel(Node *root)
+{
+    queue<pair<Node *, int>> q; // {Node, horizontal distance}
+    map<int, vector<int>> m;            // {HD, val}
+    q.push({root, 0});
+    while (q.size() > 0)
+    {
+        Node *curr = q.front().first;
+        int currHD = q.front().second;
+        q.pop();
+
+        m[currHD].push_back(curr->data); 
+
+        if (curr->left != NULL)
+            q.push({curr->left, currHD - 1});
+        if (curr->right != NULL)
+            q.push({curr->right, currHD + 1});
+    }
+
+     for (auto &pair : m)
+    {
+        for (int val : pair.second)
+        {
+            cout << val << " ";
+        }
+        cout << endl; // one line per vertical level
+    }
+    cout << endl;
+}
+
+
 // kth level
 void kLevel(Node *root, int k)
 {
@@ -168,26 +200,50 @@ void kLevel(Node *root, int k)
 
 // transform to sum tree O(n)
 
-int TreeSum(Node* root){
-    if(root==NULL) return 0;
+int TreeSum(Node *root)
+{
+    if (root == NULL)
+        return 0;
 
-    int leftSum=TreeSum(root->left);
-    int rightSum=TreeSum(root->right);
-    root->data+=leftSum+rightSum;
+    int leftSum = TreeSum(root->left);
+    int rightSum = TreeSum(root->right);
+    root->data += leftSum + rightSum;
     return root->data;
+}
+
+// this is path sum of one traversal
+int pathSum(Node *root)
+{
+    if (root == NULL)
+        return 0;
+    int x=root->data;
+    Node *temp = root;
+    int lSum = 0;
+    while (temp != NULL)
+    {
+        lSum += temp->data;
+        temp = temp->left;
+    }
+    int rSum = 0;
+    while (root != NULL)
+    {
+        rSum += root->data;
+        root = root->right;
+    }
+    return rSum + lSum-x;
 }
 
 int main()
 {
     vector<int> preorder = {1, 2, 7, -1, -1, -1, 3, 4, -1, -1, 5, -1, -1};
-    idx = -1;
+    // idx = -1;
     Node *tree = buildTree(preorder);
-    preOrder(tree);
-    TreeSum(tree);
-    cout<<endl;
-    preOrder(tree);
+    // preOrder(tree);
+    // TreeSum(tree);
+    // cout<<endl;
+    //preOrder(tree);
     //  cout<<endl;
-    //  inOrder(tree);
+    // inOrder(tree);
     //  cout<<endl;
     //  postOrder(tree);
     //  cout<<endl;
@@ -196,9 +252,10 @@ int main()
     // cout << count(tree) << endl;
     // cout << sum(tree) << endl;
 
-    // topView(tree);
+     topView(tree);
+     verticallevel(tree);
     // kLevel(tree, 2);
     // cout << endl;
-
+    // cout << pathSum(tree->right)  << endl;
     return 0;
 }

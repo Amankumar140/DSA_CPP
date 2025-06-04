@@ -120,8 +120,34 @@ int main()
     // pq.decreaseKey(3,16);
     // pq.printHeap();
     // pq.deletion(3);
-    
+
 
     pq.printHeap();
     return 0;
 }
+
+
+// only for build heap
+// int main()
+// {
+//     minHeap pq(10);
+
+//     // Fill array manually without using insert()
+//     pq.arr[0] = 10;
+//     pq.arr[1] = 20;
+//     pq.arr[2] = 65;
+//     pq.arr[3] = 30;
+//     pq.arr[4] = 40;
+//     pq.arr[5] = 50;
+//     pq.size = 6; // important: set the size
+
+//     cout << "Before buildHeap(): ";
+//     pq.printHeap();
+
+//     pq.buildHeap(); // convert the array to a valid min-heap
+
+//     cout << "After buildHeap(): ";
+//     pq.printHeap();
+
+//     return 0;
+// }

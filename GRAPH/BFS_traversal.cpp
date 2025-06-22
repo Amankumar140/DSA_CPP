@@ -37,7 +37,7 @@ void BFS(vector<int> adj[], int s, int v)
         cout << u << " " << endl;
         for (int x : adj[u])
         {
-            if (visited[x] == false)
+            if (visited[x] == false) // for matrix adj[u][i]==1 and loop is i->n
             {
                 visited[x] = true;
                 q.push(x);

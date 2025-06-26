@@ -112,12 +112,12 @@ int main()
     adjMat(adjMatrix, 1, 3);
     adjMat(adjMatrix, 1, 4);
     adjMat(adjMatrix, 3, 4);
-    // printMatrixGraph(adjMatrix);
+    printMatrixGraph(adjMatrix);
 
-    // dfs(adjListArray, v, 0);
-    // cout << endl;
-    // dfsDisconnected(adjListArray, v);
-    // cout << endl;
+    dfs(adjListArray, v, 0);
+    cout << endl;
+    dfsDisconnected(adjListArray, v);
+    cout << endl;
     dfsForMat(adjMatrix);
 
     return 0;

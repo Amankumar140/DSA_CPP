@@ -43,6 +43,37 @@ void TopoLogicalSort_KansAlgo(vector<int> adj[], int V)
         }
     }
 }
+// DFS Utility for Topological Sort
+void DFS(int u, vector<int> adj[], vector<bool> &visited, stack<int> &st) {
+    visited[u] = true;
+
+    for (int v : adj[u]) {
+        if (!visited[v]) {
+            DFS(v, adj, visited, st);
+        }
+    }
+
+    st.push(u);
+}
+// Topological Sort using DFS
+void TopoLogicalSortDFS(vector<int> adj[], int V) {
+    vector<bool> visited(V, false);
+    stack<int> st;
+
+    // Step 2: For every vertex u
+    for (int u = 0; u < V; u++) {
+        if (!visited[u]) {
+            DFS(u, adj, visited, st);
+        }
+    }
+
+    // Step 3: Pop from stack and print
+    while (!st.empty()) {
+        cout << st.top() << endl;
+        st.pop();
+    }
+    cout << endl;
+}
 
 void printGraph(vector<int> adj[], int v)
 {
@@ -69,6 +100,7 @@ int main()
     // printGraph(adj, v);
 
     // InDegree(adj,v);
-    TopoLogicalSort_KansAlgo(adj, v);
+    //TopoLogicalSort_KansAlgo(adj, v);
+    TopoLogicalSortDFS(adj, v);
     return 0;
 }

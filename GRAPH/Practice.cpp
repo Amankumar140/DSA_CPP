@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <limits.h>
+#include <stack>
 using namespace std;
 
 void buildGraph(vector<int> adj[], int v, int u)
@@ -138,7 +139,7 @@ bool dfsCycleHelp(vector<int> adj[], int s, int v)
     {
         if (!vis[i])
         {
-            if (dfsCycle(adj, s, vis, -1))
+            if (dfsCycle(adj, i, vis, -1))
                 return true;
         }
     }
@@ -146,6 +147,132 @@ bool dfsCycleHelp(vector<int> adj[], int s, int v)
 }
 
 // using bfs maintain a parent array if visited and not parent then cycle
+
+// cycle detection of directed graph
+
+bool dfsRec(vector<int> adj[], int s, vector<bool> &vis, vector<bool> &recSt)
+{
+    vis[s] = true;
+    recSt[s] = true;
+    for (int x : adj[s])
+    {
+        if (!vis[x] && dfsRec(adj, x, vis, recSt))
+        {
+            return true;
+        }
+        else if (recSt[x])
+        {
+            return true;
+        }
+    }
+    recSt[s] = false;
+    return false;
+}
+
+bool dfsCycleDir(vector<int> adj[], int v)
+{
+    vector<bool> vis(v + 1, false);
+    vector<bool> recSt(v + 1, false);
+    for (int i = 0; i < v; i++)
+    {
+        if (!vis[i])
+        {
+            if (dfsRec(adj, i, vis, recSt))
+                return true;
+        }
+    }
+    return false;
+}
+
+void buildGraphDir(vector<int> adj[], int u, int v)
+{
+    adj[u].push_back(v);
+}
+
+// print graph
+
+void printGraph(vector<int> adj[], int v)
+{
+    for (int i = 0; i < v; i++)
+    {
+        cout << i << ": ";
+        for (int x : adj[i])
+        {
+            cout << x << " ";
+        }
+        cout << endl;
+    }
+}
+
+// topological sort
+vector<int> inDegree(vector<int> adj[], int v)
+{
+    vector<int> inDeg(v, 0);
+    for (int i = 0; i < v; i++)
+    {
+        for (int x : adj[i])
+        {
+            ++inDeg[x];
+        }
+    }
+    return inDeg;
+}
+
+void topologicalSortBfs(vector<int> adj[], int v)
+{
+    vector<int> inDeg = inDegree(adj, v);
+    queue<int> q;
+    for (int i = 0; i < v; i++)
+    {
+        if (inDeg[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+    while (!q.empty())
+    {
+        int x = q.front();
+        q.pop();
+        cout << x << endl;
+        for (int v : adj[x])
+        {
+            if (--inDeg[v] == 0)
+            {
+                q.push(v);
+            }
+        }
+    }
+}
+// for cycle detection by kahn's algo use cnt variable and c!=v then return true
+
+// kahn s using dfs
+
+void DFS(vector<int> adj[], int s, vector<bool> &vis, stack<int> &st)
+{
+    vis[s] = true;
+    for (int u : adj[s])
+    {
+        if (!vis[u])
+            DFS(adj, u, vis, st);
+    }
+    st.push(s);
+}
+
+void TopologicalUsingDFS(vector<int> adj[], int v)
+{
+    vector<bool> vis(v, false);
+    stack<int> st;
+    for (int i = 0; i < v; i++)
+    {
+        if (!vis[i])
+            DFS(adj, i, vis, st);
+    }
+    while (!st.empty())
+    {
+        cout << st.top() << " ";
+        st.pop();
+    }
+}
 
 int main()
 {
@@ -170,8 +297,25 @@ int main()
     // for(int i=1;i<=vertex; i++){
     //     cout<<dis[i]<<endl;
     // }
+    // cout << dfsCycleHelp(adj, 1, vertex + 1);
 
-    cout<<dfsCycleHelp(adj, 1, vertex + 1);
+    // directed graph
+    int vtx = 6;
+    vector<int> adj1[vtx];
+    buildGraphDir(adj1, 0, 1);
+    buildGraphDir(adj1, 0, 2);
+    buildGraphDir(adj1, 1, 3);
+    buildGraphDir(adj1, 2, 3);
+    // buildGraphDir(adj1, 5, 3);
+    buildGraphDir(adj1, 3, 4);
+    buildGraphDir(adj1, 3, 5);
+    // buildGraphDir(adj1, 5, 2);
+    // dfsCycleDir(adj1,vtx+1);
+    // cout<<endl;
+    // printGraph(adj1,vtx);
+    topologicalSortBfs(adj1, vtx);
+    cout << endl;
+    TopologicalUsingDFS(adj1, vtx);
 
     return 0;
 }

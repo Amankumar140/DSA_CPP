@@ -67,6 +67,27 @@ void bfsDisconnected(vector<int> adj[], int s, int v)
     }
 }
 
+// dfs traversal
+
+void dfs(vector<int> adj[], int s, vector<bool> &visited)
+{
+    visited[s] = true;
+    cout << s << " ";
+    for (int u : adj[s])
+    {
+        if (!visited[u])
+        {
+            dfs(adj, u, visited);
+        }
+    }
+}
+
+void dfsHelp(vector<int> adj[], int s, int v)
+{
+    vector<bool> visited(v + 1, false);
+    dfs(adj, s, visited);
+}
+
 int main()
 {
     int vertex = 6;
@@ -81,6 +102,8 @@ int main()
     BFS(adj, 1, vertex);
     cout << endl;
     bfsDisconnected(adj, 2, vertex);
+    cout<<"\nDFS"<<endl;
+    dfsHelp(adj,1,vertex);
 
     return 0;
 }

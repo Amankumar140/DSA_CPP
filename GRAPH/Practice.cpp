@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <limits.h>
 using namespace std;
 
 void buildGraph(vector<int> adj[], int v, int u)
@@ -88,10 +89,68 @@ void dfsHelp(vector<int> adj[], int s, int v)
     dfs(adj, s, visited);
 }
 
+// shortest path of the
+void shortestPath(vector<int> adj[], int s, int v, vector<int> &dis)
+{
+    vector<bool> vis(v + 1, false);
+    queue<int> q;
+    q.push(s);
+    dis[s] = 0;
+    vis[s] = true;
+    while (!q.empty())
+    {
+        int curr = q.front();
+        q.pop();
+        for (int u : adj[curr])
+        {
+            if (!vis[u])
+            {
+                q.push(u);
+                dis[u] = dis[curr] + 1;
+                vis[u] = true;
+            }
+        }
+    }
+}
+
+// cycle detection using dfs
+
+bool dfsCycle(vector<int> adj[], int s, vector<bool> &visited, int parent)
+{
+    visited[s] = true;
+    for (int u : adj[s])
+    {
+        if (!visited[u])
+        {
+            if (dfsCycle(adj, u, visited, s))
+                return true;
+            else if (parent != u)
+                return true;
+        }
+    }
+    return false;
+}
+
+bool dfsCycleHelp(vector<int> adj[], int s, int v)
+{
+    vector<bool> vis(v + 1, false);
+    for (int i = 0; i < v; i++)
+    {
+        if (!vis[i])
+        {
+            if (dfsCycle(adj, s, vis, -1))
+                return true;
+        }
+    }
+    return false;
+}
+
+// using bfs maintain a parent array if visited and not parent then cycle
+
 int main()
 {
-    int vertex = 6;
-    vector<int> adj[vertex];
+    int vertex = 5;
+    vector<int> adj[vertex + 1];
     buildGraph(adj, 1, 4);
     buildGraph(adj, 1, 2);
     buildGraph(adj, 4, 5);
@@ -99,11 +158,20 @@ int main()
     buildGraph(adj, 2, 3);
     buildGraph(adj, 5, 3);
 
-    BFS(adj, 1, vertex);
-    cout << endl;
-    bfsDisconnected(adj, 2, vertex);
-    cout<<"\nDFS"<<endl;
-    dfsHelp(adj,1,vertex);
+    // BFS(adj, 1, vertex);
+    // cout << endl;
+    // bfsDisconnected(adj, 2, vertex);
+    // cout<<"\nDFS"<<endl;
+    // dfsHelp(adj,1,vertex);
+
+    // for shortest path
+    vector<int> dis(vertex + 1, INT_MAX);
+    shortestPath(adj, 1, vertex + 1, dis);
+    // for(int i=1;i<=vertex; i++){
+    //     cout<<dis[i]<<endl;
+    // }
+
+    cout<<dfsCycleHelp(adj, 1, vertex + 1);
 
     return 0;
 }

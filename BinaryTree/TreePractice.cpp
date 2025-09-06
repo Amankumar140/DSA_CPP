@@ -60,7 +60,7 @@ void levelOrder(Node *root)
                 cout << endl;
                 q.push(NULL);
                 continue;
-                ;
+                
             }
             else
             {

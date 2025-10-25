@@ -90,7 +90,58 @@ void bfsTraversal2(vector<vector<int>> &mat, int s)
 // for disconnected graph
 
 // two functions used....
+void bfsTraversalMainHelpDisconnected(vector<int> adj[], int n, int s, vector<bool> &visited)
+{
+    queue<int> q;
+    q.push(s);
+    visited[s] = true;
+    while (!q.empty())
+    {
+        int curr = q.front();
+        q.pop();
+        cout << curr << " ";
+        for (int x : adj[curr])
+        {
+            if (!visited[x])
+            {
+                visited[x] = true;
+                q.push(x);
+            }
+        }
+    }
+}
 
+void bfsTraversalMain(vector<int> adj[], int n, int s)
+{
+    vector<bool> visited(n + 1, false);
+    for (int i = 0; i < n; i++)
+    {
+        if (!visited[i])
+        {
+            bfsTraversalMainHelpDisconnected(adj, n, i, visited);
+        }
+    }
+}
+
+// dfs traversal using recursion
+
+void dfs(vector<int> adj[], int s, vector<bool> &visited)
+{
+    visited[s] = true;
+    cout << s << " ";
+    for (int i : adj[s])
+    {
+        if (!visited[i])
+        {
+            dfs(adj, i, visited);
+        }
+    }
+}
+void dfsMain(vector<int> adj[], int n, int s)
+{
+    vector<bool> visited(n + 1, false);
+    dfs(adj, s, visited);
+}
 
 int main()
 {
@@ -108,8 +159,9 @@ int main()
     // printGraph(adj, n);
     // cout << "AdjancyMatrix" << endl;
     // printMatrix(mat);
-    bfsTraversal(adj, n, 0);
-    cout << endl;
-    bfsTraversal2(mat, 0);
+    // bfsTraversal(adj, n, 0);
+    // cout << endl;
+    // bfsTraversal2(mat, 0);
+    dfsMain(adj,n,0);
     return 0;
 }
